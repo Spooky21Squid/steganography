@@ -1,0 +1,97 @@
+package steganography;
+
+public class ASCII {
+	
+	/**
+	 * Unit Testing Function
+	 * @param args
+	 */
+	public static void main(String[] args) {
+
+	}
+	
+	/**
+	 * encode msg to an array of bits using ASCII encoding. This method assumes each character is a valid ASCII character.
+	 * @param msg The message to be encoded, using English characters, numbers and punctuation
+	 * @return An array of booleans representing the msg
+	 */
+	public static boolean[] encode(String msg) {
+		
+		if (msg == null) {
+			return null;
+		}
+		
+		if (msg.length() == 0) {
+			return new boolean[0];
+		}
+		
+		boolean[] msgArray = new boolean[msg.length() * 7];
+		int nextIndex = 0;
+		char c;
+		int asciiVal;
+		String binaryVal;
+		
+		for (int i = 0; i < msg.length(); i++) {
+			c = msg.charAt(i);
+			asciiVal = (int) c;
+			binaryVal = Integer.toBinaryString(asciiVal);
+			
+			for (int j = 0; j < binaryVal.length(); j++) {
+				if (binaryVal.charAt(j) == '1') {
+					msgArray[nextIndex] = true;
+				} else {
+					msgArray[nextIndex] = false;
+				}
+				nextIndex++;
+			}
+		}
+		
+		return msgArray;		
+	}
+	
+	/**
+	 * decode bits to a String using ASCII encoding
+	 * @param bits A boolean array representing a message
+	 * @return A string message
+	 */
+	public static String decode(boolean[] bits) {
+		return null;
+		
+	}
+	
+	/**
+	 * Convert a single character into a boolean array, representing the binary-ascii representation of the character.
+	 * @param c The character to be converted
+	 */
+	private static int[] extractBinary(char c) {
+		int[] binaryArr = new int[7];
+		int asciiVal = (int) c;
+		int result = asciiVal;
+		int digit;
+		int index = 0;
+		
+		while (result != 0) {
+			digit = result % 2; // Gets the least significant digit
+			result /= 2; // Shifts the number one to the right (discards the lsd)
+			binaryArr[6 - index] = digit;
+			index++;
+		}
+		
+		System.out.print("In function: ");
+		for (int i = 0; i < binaryArr.length; i++) {
+			System.out.print(binaryArr[i]);
+			System.out.print(", ");
+		}
+		
+		System.out.println("index: " + Integer.toString(index));
+		
+		// Pad out the binary number with 0s
+		while (index <= 6) {
+			binaryArr[6 - index] = 0;
+		}
+		
+		return binaryArr;
+		
+	}
+
+}

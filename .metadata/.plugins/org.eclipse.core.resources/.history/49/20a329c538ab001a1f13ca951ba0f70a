@@ -1,0 +1,134 @@
+package steganography;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+public class HideMessage {
+
+	/**
+	 * hide an (optionally encrypted) message in an image
+	 * 
+	 * @param args [File path to the image, Message to encrypt, Name of the new
+	 *             image]
+	 */
+	public static void main(String[] args) {
+
+		if (args.length != 3) {
+			System.out.println("Program Exited: Number of arguments was not 3.");
+			System.exit(1);
+		}
+
+		if (!args[0].endsWith(".png")) {
+			System.out.println("Program Exited: File supplied was not a .png.");
+			System.exit(1);
+		}
+
+		BufferedImage image = null;
+
+		try {
+			image = ImageIO.read(new File(args[0]));
+		} catch (IOException e) {
+			System.out.println("Program Exited: Could not read image.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		int width = image.getWidth();
+		int height = image.getHeight();
+
+		// If the length of the message is greater than the amount of pixels in the
+		// image, exit
+		if (args[1].length() > width * height) {
+			System.out.println("Program Exited: Message was too long to be stored in '" + args[0] + "'.");
+			System.exit(1);
+		}
+
+		// Encode the msg in args[1] to a boolean array
+		// For each boolean value in the array and each pixel in the image,
+		// If the boolean value is true, set the lsb in the pixel to be 1
+		// If the boolean value is false, set the lsb in the pixel to be 0
+		// Save the new image
+		
+		System.out.println("Message: " + args[1]);
+
+		boolean[] encodedMessage = ASCII.encode(args[1]);
+		int col;
+		int row = -1;
+		int pixel;
+
+		for (int i = 0; i < encodedMessage.length; i++) {
+			// Convert the index in the boolean array to a 2d position
+
+			col = i % 7;
+
+			// System.out.print("col: " + col + ", ");
+
+			if (i % 7 == 0) {
+				row += 1;
+			}
+
+			// System.out.println("row: " + row);
+
+			// Get the pixel in that position, encode it, and set it
+			pixel = image.getRGB(col, row);
+			System.out.println("Old pixel value: " + pixel);
+
+			if (encodedMessage[i]) {
+				if (pixel % 2 == 0) {
+					pixel += 1;
+				}
+			}
+
+			if (!encodedMessage[i]) {
+				if (pixel % 2 == 1) {
+					pixel -= 1;
+				}
+			}
+			
+			System.out.println("New pixel value: " + pixel);
+
+			image.setRGB(col, row, pixel);
+
+		}
+
+		// If the image has enough pixels left, add the ascii null character
+		if ((width * height) - (encodedMessage.length * 7) > 7) {
+			for (int i = encodedMessage.length; i < encodedMessage.length + 7; i++) {
+				// Convert the index in the boolean array to a 2d position
+
+				col = i % 7;
+
+				if (i % 7 == 0) {
+					row += 1;
+				}
+
+				// Get the pixel in that position, encode it, and set it
+				pixel = image.getRGB(col, row) & 0xFFFFFF;
+
+				if (pixel % 2 == 1) {
+					pixel -= 1;
+				}
+
+				image.setRGB(col, row, pixel);
+			}
+		}
+
+		File encodedImage = new File(args[2]);
+
+		try {
+			ImageIO.write(image, "png", encodedImage);
+		} catch (IOException e) {
+			System.out.println("Program Exited: Could not write the image to '" + args[2] + "'.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		System.out.println("Message encoded!");
+		System.out.println("Image File: " + encodedImage.getAbsolutePath());
+
+	}
+
+}

@@ -1,0 +1,19 @@
+package steganography;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+/**
+ * Testing the functions of this project
+ *
+ */
+public class Main {
+
+	public static void main(String[] args) {
+		int num = 19;
+		int result = num / 10;
+		System.out.println(result);
+	}
+
+}

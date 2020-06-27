@@ -1,0 +1,19 @@
+package steganography;
+
+/**
+ * Testing the functions of this project
+ *
+ */
+public class Main {
+
+	public static void main(String[] args) {
+		int[][] imageArray = ImageData.load("Adobe B&W TOP Contest.jpg");
+		
+		for (int[] row : imageArray) {
+			for (int value : row) {
+				System.out.println(value);
+			}
+		}
+	}
+
+}

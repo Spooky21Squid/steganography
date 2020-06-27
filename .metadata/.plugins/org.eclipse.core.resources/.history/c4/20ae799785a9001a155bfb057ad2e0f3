@@ -1,0 +1,91 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import steganography.ASCII;
+
+public class ASCIITest {
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+		
+		String msg = "hi";
+		boolean[] boolSeq = {true, true, false, true, false, false, false, true, true, false, true, false, false, true};
+		boolean equal = true;
+		
+		boolean[] result = ASCII.encode(msg);
+		
+		if (result.length != boolSeq.length) {
+			System.out.println("Lengths are different.");
+			equal = false;
+		} else {
+			for (int i = 0; i < boolSeq.length; i++) {
+				if (boolSeq[i] != result[i]) {
+					System.out.println("Not equal. Bool at: " + Integer.toString(i));
+					equal = false;
+					break;
+				}
+			}
+		}
+		
+		if (equal) {
+			System.out.println("They are equal!");
+		}
+		
+		result = ASCII.encode("");
+		
+		if (result.length == 0) {
+			System.out.println("Works with 0 length message.");
+		}
+		
+		result = ASCII.encode(null);
+		
+		if (result == null) {
+			System.out.println("Works with null message");
+		}
+		
+		int[] binaryArr = ASCII.extractBinary('9');
+		int[] actualVal = {1, 1, 0, 0, 0, 0, 1};
+		
+		System.out.print("Returned value: ");
+		System.out.println(binaryArr);
+		
+		System.out.print("Actual value: ");
+		System.out.println(actualVal);
+	}
+	
+	@Test
+	public void testExtractBinary() {
+		
+		int[] binaryValOfa = {1, 1, 0, 0, 0, 0, 1};
+		int[] binaryValOfD = {1, 0, 0, 0, 1, 0, 0};
+		int[] binaryValOf9 = {0, 1, 1, 1, 0, 0, 1};
+		
+		int[] resultOfa = ASCII.extractBinary('a');
+		int[] resultOfD = ASCII.extractBinary('D');
+		int[] resultOf9 = ASCII.extractBinary('9');
+		
+		int i;
+		
+		for (i = 0; i < binaryValOfa.length; i++) {
+			if (binaryValOfa[i] != resultOfa[i]) {
+				fail("Converting 'a' from char to binary failed");
+			}
+		}
+		
+		for (i = 0; i < binaryValOfD.length; i++) {
+			if (binaryValOfD[i] != resultOfD[i]) {
+				fail("Converting 'D' from char to binary failed");
+			}
+		}
+		
+		for (i = 0; i < binaryValOf9.length; i++) {
+			if (binaryValOf9[i] != resultOf9[i]) {
+				fail("Converting '9' from char to binary failed");
+			}
+		}
+	}
+}

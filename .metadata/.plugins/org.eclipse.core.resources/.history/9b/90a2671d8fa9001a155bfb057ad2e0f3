@@ -1,0 +1,80 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import steganography.ASCII;
+
+public class ASCIITest {
+	
+	@Test
+	public void testExtractBinary() {
+		
+		boolean[] binaryValOfa = {true, true, false, false, false, false, true};
+		boolean[] binaryValOfD = {true, false, false, false, true, false, false};
+		boolean[] binaryValOf9 = {false, true, true, true, false, false, true};
+		
+		boolean[] resultOfa = ASCII.extractBinary('a');
+		boolean[] resultOfD = ASCII.extractBinary('D');
+		boolean[] resultOf9 = ASCII.extractBinary('9');
+		
+		int i;
+		
+		for (i = 0; i < binaryValOfa.length; i++) {
+			if (binaryValOfa[i] != resultOfa[i]) {
+				fail("Converting 'a' from char to binary failed");
+			}
+		}
+		
+		for (i = 0; i < binaryValOfD.length; i++) {
+			if (binaryValOfD[i] != resultOfD[i]) {
+				fail("Converting 'D' from char to binary failed");
+			}
+		}
+		
+		for (i = 0; i < binaryValOf9.length; i++) {
+			if (binaryValOf9[i] != resultOf9[i]) {
+				fail("Converting '9' from char to binary failed");
+			}
+		}
+	}
+	
+	@Test
+	public void testEncodeMessageWithLength2() {
+		String msg = "hi";
+		boolean[] boolSeq = {true, true, false, true, false, false, false, true, true, false, true, false, false, true};
+		
+		boolean[] result = ASCII.encode(msg);
+		
+		if (result.length != boolSeq.length) {
+			fail("Length of encoded message is different to actual boolean array");
+		} else {
+			for (int i = 0; i < boolSeq.length; i++) {
+				if (boolSeq[i] != result[i]) {
+					fail("Encoded message is not equal. Bool at: " + Integer.toString(i));
+				}
+			}
+		}
+	}
+	
+	@Test
+	public void testEncodeEmptyMessage() {
+		boolean[] result = ASCII.encode("");
+		assertEquals("Empty message encoded successfully", 0, result.length);
+	}
+	
+	@Test
+	public void testEncodeNullMessage() {
+		boolean[] result = ASCII.encode(null);
+		assertEquals("Null message encoded successfully", null, result);
+	}
+	
+	@Test
+	public void testDecodeMessageWithLength3() {
+		boolean[] result = {true, false, false, true, false, false, false, true, true, false, false, false, false, true, false, true, true, true, false, false, true}; // 'h'
+		String msg = ASCII.decode(result);
+		assertEquals("Decoded message correctly", "Ha9", msg);
+	}
+	
+}

@@ -1,0 +1,16 @@
+package steganography;
+
+/**
+ * Testing the functions of this project
+ *
+ */
+public class Main {
+
+	public static void main(String[] args) {
+		
+		boolean[] result = {true, false, false, true, false, false, false, true, true, false, false, false, false, true, false, true, true, true, false, false, true}; // 'h'
+		String msg = ASCII.decode(result);
+		
+	}
+
+}

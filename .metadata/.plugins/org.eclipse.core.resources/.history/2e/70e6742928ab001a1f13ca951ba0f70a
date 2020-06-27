@@ -1,0 +1,21 @@
+package steganography;
+
+/**
+ * Testing the functions of this project
+ *
+ */
+public class Main {
+
+	public static void main(String[] args) {
+		
+		int[] numbers = new int[10];
+		
+		for (int row = 0; row < 34; row++) {
+			for (int col = 0; col < 23; col++) {
+				System.out.println((row * 23) + col);
+			}
+		}
+		
+	}
+
+}

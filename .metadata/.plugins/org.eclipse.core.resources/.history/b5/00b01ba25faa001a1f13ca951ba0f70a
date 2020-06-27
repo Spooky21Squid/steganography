@@ -1,0 +1,134 @@
+package steganography;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+public class RetrieveMessage {
+	
+	/**
+	 * retrieve an (optionally encrypted) message in an image
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		if (args.length != 1) {
+			System.out.println("Program Exited: Number of arguments was not 1.");
+			System.exit(1);
+		}
+		
+		if (!args[0].endsWith(".png")) {
+			System.out.println("Program Exited: File supplied was not a .png.");
+			System.exit(1);
+		}
+		
+		// Read the image file
+		// Convert the image into a boolean array of ones and zeros/ trues and falses
+		// read the lsb of each pixel (32 bits)
+		// Convert those bits into characters
+		// print the message
+		
+		BufferedImage image = null;
+		
+		try {
+			image = ImageIO.read(new File(args[0]));
+		} catch (IOException e) {
+			System.out.println("Program Exited: Could not read image.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		int width = image.getWidth();
+		int height = image.getHeight();
+		
+		boolean[] bits = new boolean[width * height]; // Stores all the bits extracted from the image
+		int pixel; // The pixel we are currently looking at
+		int bitIndex; // The next available index for a bit inside the bits array
+		
+		for (int row = 0; row < height; row++) {
+			System.out.println("Row: " + row);
+			for (int col = 0; col < width; col++) {
+				
+				try {
+					pixel = image.getRGB(row, col) & 0xFFFFFF;
+				} catch (ArrayIndexOutOfBoundsException e) {
+					e.printStackTrace();
+					System.out.println("Carrying on...");
+				}
+				
+				//System.out.println("Pixel: " + pixel);
+				bitIndex = (row * width) + col; // Converts the 2d position in the image's pixels array to a 1d position
+				
+				if (pixel % 2 == 0) {
+					bits[bitIndex] = false;
+				} else {
+					bits[bitIndex] = true;
+				}
+				
+			}
+		}
+		
+		// Testing to see if the bit array works
+		
+		System.out.println("First row of the image's bits:");
+		int testPixel;
+		String output = "";
+		
+		for (int i = 0; i < width; i++) {
+			testPixel = image.getRGB(i, 0);
+			if (testPixel % 2 == 0) {
+				output += "false, ";
+			} else {
+				output += "true, ";
+			}
+		}
+		System.out.println(output);
+		
+		output = "";
+		boolean val;
+		System.out.println("In bits array:");
+		for (int i = 0; i < width; i++) {
+			val = bits[i];
+			if (val) {
+				output += "true, ";
+			} else {
+				output = "false, ";
+			}
+		}
+		
+				
+//		try {
+//			File f = new File("pixels.txt");
+//			FileWriter writer = new FileWriter(f);
+//			
+//			for (int row = 0; row < height; row++) {
+//				for (int col = 0; col < width; col++) {
+//					writer.write(String.valueOf(pixels[row][col]));
+//					writer.write(", ");
+//				}
+//			}
+//			
+//			writer.close();
+//			
+//		} catch (IOException e) {
+//			System.out.println("Program Exited: Could not create file.");
+//			e.printStackTrace();
+//			System.exit(1);
+//		}
+		
+		
+	}
+	
+	/**
+	 * Counts the number of elements in an array or integers
+	 * @return
+	 */
+	private int count(int[] array) {
+		return 0;
+		
+	}
+
+}

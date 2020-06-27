@@ -1,0 +1,5 @@
+package steganography;
+
+public class Picture {
+
+}

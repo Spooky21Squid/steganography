@@ -1,0 +1,70 @@
+package steganography;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+public class HideMessage {
+	
+	/**
+	 * hide an (optionally encrypted) message in an image
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		if (args.length != 2) {
+			System.out.println("Program Exited: Number of arguments was not 2.");
+			System.exit(1);
+		}
+		
+		if (!args[0].endsWith(".png")) {
+			System.out.println("Program Exited: File supplied was not a .png.");
+			System.exit(1);
+		}
+		
+		BufferedImage image = null;
+		
+		try {
+			image = ImageIO.read(new File(args[0]));
+		} catch (IOException e) {
+			System.out.println("Program Exited: Could not read image.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		int width = image.getWidth();
+		int height = image.getHeight();
+		
+		// If the length of the message is greater than the amount of pixels in the image, exit
+		if (args[1].length() > width * height) {
+			System.out.println("Program Exited: Message was too long to be stored in '" + args[0] + "'.");
+			System.exit(1);
+		}
+		
+		// Encode the msg in args[1] to a boolean array
+		// For each boolean value in the array and each pixel in the image,
+		//   If the boolean value is true, set the lsb in the pixel to be 1
+		//   If the boolean value is false, set the lsb in the pixel to be 0
+		// Save the new image
+		
+		boolean[] encodedMessage = ASCII.encode(args[1]);
+		int x;
+		
+		for (int i = 0; i < encodedMessage.length; i+=6) {
+			// Convert the index in the boolean array to a 2d position
+			// After index = n * width
+			
+			// TEST WIDTH = 12
+			
+			for (int j = 0; j < 6; j++) {
+				System.out.print("y: " + i + ", ");
+				System.out.println("x: " + j);
+			}
+			
+		}
+
+	}
+
+}

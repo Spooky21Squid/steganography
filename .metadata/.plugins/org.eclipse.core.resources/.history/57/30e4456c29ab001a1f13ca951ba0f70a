@@ -1,0 +1,19 @@
+package steganography;
+
+/**
+ * Testing the functions of this project
+ *
+ */
+public class Main {
+
+	public static void main(String[] args) {
+		
+		int[] numbers = new int[10];
+		
+		for (int i = 0; i < 100; i++) {
+			System.out.println("col: " + (i % 6));
+		}
+		
+	}
+
+}

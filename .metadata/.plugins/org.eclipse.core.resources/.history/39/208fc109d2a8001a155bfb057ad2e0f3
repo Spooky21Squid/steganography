@@ -1,0 +1,25 @@
+package steganography;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+/**
+ * Testing the functions of this project
+ *
+ */
+public class Main {
+
+	public static void main(String[] args) {
+		char c1 = 'c';
+		char c2 = 'c';
+		char c3 = 'd';
+		
+		if (c1 == c2) {
+			System.out.println("Chars are equal");
+		} else {
+			System.out.println("Chars are not equal");
+		}
+	}
+
+}
